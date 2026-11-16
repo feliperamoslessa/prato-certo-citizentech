@@ -42,3 +42,41 @@ Dados simulados estão marcados como tais. Não publicar nomes, RMs, contatos re
 
 ## Equipe
 **Preencher somente nas cópias privadas de entrega:** [nomes completos e RMs, em ordem alfabética]. 
+
+## Executar o protótipo localmente
+
+Requisitos: Node.js 22.18 ou superior e npm.
+
+```sh
+npm ci
+npm run dev
+```
+
+Abra o endereço exibido pelo Vite no terminal. Use o menu para acessar o dashboard de
+impacto, cadastrar um excedente ou filtrar as doações por status e instituição.
+
+| Script | O que faz |
+| --- | --- |
+| `npm run dev` | Inicia o servidor local com atualização automática. |
+| `npm run build` | Verifica os tipos e gera o site estático em `dist/`. |
+| `npm run preview` | Serve o build localmente após a compilação. |
+| `npm test` | Executa os testes de validação, registro e filtros. |
+
+A interface usa React, TypeScript, Vite e Tailwind CSS. Os indicadores e as instituições
+são fictícios. O dashboard apresenta uma série histórica independente da lista de
+acompanhamento. Os lotes cadastrados ficam em memória e são descartados ao recarregar
+a página. Cada novo lote fica pendente de verificação sanitária humana e indisponível
+para oferta. O protótipo funciona sem backend, autenticação ou integrações externas.
+
+### Animações e pitch
+
+A visão de impacto usa GSAP na abertura, Three.js com React Three Fiber na cena 3D,
+Lenis na rolagem e Motion nas transições e nos cards. A preferência do sistema por
+movimento reduzido ativa a ilustração estática e mantém a rolagem nativa.
+
+O botão **Abrir vídeo** no dashboard exibe a apresentação curta e silenciosa de 38
+segundos. A composição usa Remotion e fica em `pitch/video/`.
+
+- `npm run pitch:studio` abre o editor local do vídeo.
+- `npm run pitch:render` gera `pitch/prato-certo.mp4` em 1080p, a 30 quadros por segundo.
+  O Remotion pode baixar o navegador de renderização na primeira execução.
