@@ -1,0 +1,30 @@
+flowchart LR
+  subgraph A["1. Origem"]
+    A1["Cadastro de estabelecimentos"]
+    A2["Cadastro de lotes"]
+    A3["Cadastro de instituições"]
+  end
+  subgraph B["2. Processamento"]
+    B1["Validação de dados"]
+    B2["Checagem documental sanitária"]
+    B3["Elegibilidade e priorização explicável"]
+  end
+  subgraph C["3. Armazenamento"]
+    C1[("PostgreSQL")]
+    C2["Logs e catálogo versionado"]
+  end
+  subgraph D["4. Consumo"]
+    D1["Lista de ofertas elegíveis"]
+    D2["Acompanhamento de doações"]
+    D3["Dashboard agregado"]
+  end
+  A1 --> B1
+  A2 --> B1
+  A3 --> B1
+  B1 --> B2 --> B3 --> C1
+  B1 --> C2
+  B2 --> C2
+  B3 --> C2
+  C1 --> D1
+  C1 --> D2
+  C1 --> D3

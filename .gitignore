@@ -1,0 +1,15 @@
+# dados pessoais e entrega acadêmica privada
+private/
+entrega-privada/
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+.DS_Store
+node_modules/
+dist/
+build/
+*.mp4
+*.mov
+*.wav

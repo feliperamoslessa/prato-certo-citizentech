@@ -1,0 +1,4 @@
+lote_id,estabelecimento_id,descricao,quantidade_kg,validade_em,atestacao_sanitaria,estado,tipo_dado
+LOT-001,EST-001,Vegetais frescos,12.5,2026-11-17T18:00:00,true,elegivel,SIMULADO
+LOT-002,EST-002,Pães embalados,8.0,2026-11-17T13:00:00,true,ofertado,SIMULADO
+LOT-003,EST-003,Refeições preparadas,5.0,2026-11-16T21:00:00,false,bloqueado,SIMULADO
