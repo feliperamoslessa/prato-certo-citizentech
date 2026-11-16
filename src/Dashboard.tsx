@@ -40,7 +40,7 @@ export function Dashboard({ lots, now }: { lots: readonly Lot[]; now: number }) 
       <ImpactHero />
       <section aria-labelledby="indicators" className="space-y-4">
         <div className="section-heading">
-          <div><h2 id="indicators">Indicadores de impacto</h2><p>Dados simulados · agrupados pelo mês da oferta</p></div>
+          <div><h2 id="indicators">Indicadores de impacto</h2><p>Dados simulados · mês da oferta no horário de São Paulo</p></div>
           <label className="period">
             <span className="sr-only">Período dos indicadores</span>
             <select value={period} onChange={(event) => setPeriod(Number(event.target.value))}>
