@@ -1,14 +1,27 @@
 import { categories, lotStatus, MINUTE } from './model.ts'
 import type { Lot } from './model.ts'
 
+const saoPauloMonth = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'America/Sao_Paulo',
+  year: 'numeric',
+  month: '2-digit',
+})
+
+export function monthKey(at: number) {
+  const parts = saoPauloMonth.formatToParts(new Date(at))
+  const year = parts.find((part) => part.type === 'year')!.value
+  const month = parts.find((part) => part.type === 'month')!.value
+  return `${year}-${month}`
+}
+
 export function offerMonth(lot: Lot) {
-  return lot.offer ? new Date(lot.offer.events[0].at).toISOString().slice(0, 7) : null
+  return lot.offer ? monthKey(lot.offer.events[0].at) : null
 }
 
 export function monthKeys(count: number, now: number) {
-  const date = new Date(now)
+  const [year, month] = monthKey(now).split('-').map(Number)
   return Array.from({ length: count }, (_, index) =>
-    new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() - count + 1 + index, 1)).toISOString().slice(0, 7),
+    new Date(Date.UTC(year, month - count + index, 1)).toISOString().slice(0, 7),
   )
 }
 
