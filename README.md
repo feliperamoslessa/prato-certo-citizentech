@@ -48,7 +48,7 @@ O aplicativo roda no cliente. A interface respeita a preferência do sistema por
 
 O cenário inicial gera 15 lotes e três instituições fictícias. Os períodos históricos e as validades iniciais são relativos à abertura sem cenário salvo ou à restauração. Um lote pode ter uma oferta vinculada a uma instituição e um histórico de etapas. O status atual é a última etapa registrada, ou o estado da verificação sanitária quando ainda não há oferta. O CSV em `data/` é um exemplo acadêmico independente e fica fora do fluxo da aplicação.
 
-Dashboard, matching e acompanhamento consultam o mesmo conjunto de lotes. Os períodos incluem o mês atual e agrupam pelo mês UTC da **primeira oferta**. Uma entrega em mês posterior continua no grupo da oferta. O peso de entrega corresponde ao lote inteiro neste cenário. Os horários de acompanhamento aparecem no fuso de São Paulo.
+Dashboard, matching e acompanhamento consultam o mesmo conjunto de lotes. Os períodos incluem o mês atual e agrupam pelo mês local de **São Paulo** da **primeira oferta**. A conversão de fuso é testada na virada de mês. Uma entrega em mês posterior continua no grupo da oferta. O peso de entrega corresponde ao lote inteiro neste cenário. Os horários de acompanhamento aparecem no fuso de São Paulo.
 
 | Indicador | Fórmula |
 | --- | --- |
