@@ -1,4 +1,4 @@
-# Proposta executiva — Prato Certo (versão 0.1)
+# Proposta executiva — Prato Certo (protótipo v0.2 + revisão de dados)
 
 ## 1. Identificação
 Prato Certo — Tecnologia que alimenta conexões. Turma: [PREENCHER]. Integrantes: [PREENCHER NOMES E RMs EM ORDEM ALFABÉTICA]. Responsável: [PREENCHER].
@@ -18,21 +18,21 @@ Em 2022, o desperdício mundial estimado no varejo, serviços de alimentação e
 - Parceiros públicos e entidades locais: podem apoiar integração e supervisão, sem parceria já firmada.
 
 ## 4. Solução
-Aplicação responsiva de cadastro e acompanhamento de lotes, validação da elegibilidade e priorização explicável de instituições receptoras. Regras de negócio: somente lotes com confirmação de adequação sanitária, prazo ainda válido e condições de armazenamento documentadas podem ficar disponíveis para oferta. Matching não implica reserva automática; aceitação depende da organização.
+Protótipo responsivo de cadastro e acompanhamento de lotes, com validação local da elegibilidade e recomendação explicável entre instituições fictícias. O matching já existe no front-end, mas usa capacidade, conservação, distâncias e tempos **simulados** e não executa logística real. Regras de negócio: somente lotes com confirmação de adequação sanitária, prazo ainda válido e condições de armazenamento documentadas podem ficar disponíveis para oferta. Matching não implica reserva automática; aceitação depende da organização.
 
-**Acessibilidade:** formulários objetivos, contraste, compatibilidade com leitor de tela, interface mobile e possibilidade de registros por intermediário autorizado nos casos de baixa conectividade. Sincronização offline seria evolução futura.
+**Acessibilidade:** formulários objetivos, contraste, semântica HTML, navegação por teclado e interface mobile. Compatibilidade completa com leitores de tela ainda demanda validação prática. Registro assistido em cenários de baixa conectividade é proposta futura. Sincronização offline seria evolução futura.
 
 ## 5. Impacto e ODS
-Indicadores previstos: kg efetivamente entregues; porcentagem dos lotes elegíveis com doação concluída; tempo mediano entre oferta e aceitação; taxa de cancelamento; proporção de instituições atendidas por território. Todos os números do protótipo serão marcados como **simulados**. ODS 2 e 12.3. Não equiparar automaticamente kg a refeições sem metodologia explícita.
+Indicadores previstos: kg efetivamente entregues; taxa de aproveitamento (kg entregues ÷ kg ofertados); tempo mediano entre oferta e aceitação; taxa de cancelamento; proporção de instituições atendidas por território. Todos os números do protótipo serão marcados como **simulados**. ODS 2 e 12.3. Não equiparar automaticamente kg a refeições sem metodologia explícita.
 
 ## 6. Arquitetura
-Origem: formulários de estabelecimentos e instituições; dados territoriais de apoio. Processamento: validação sanitária documental, regras de qualidade, georreferenciamento aproximado, ordenação explicável. Armazenamento: PostgreSQL com controle de acesso e trilhas de auditoria. Consumo: painel operacional, consulta de oferta e indicadores agregados. Ver `architecture/fluxo-dados.mmd`.
+No protótipo: origem em formulário local e cenário simulado; processamento em funções TypeScript de validação, matching e agregação; armazenamento em estado React e opcionalmente `localStorage`; consumo em dashboard e fluxo operacional. Arquitetura **futura**, não implementada: ingestão de cadastros de estabelecimentos e instituições, processamento ETL com verificação documental humana, PostgreSQL com controles de acesso e auditoria, integração com mapas reais e relatórios agregados. Ver `architecture/fluxo-dados.mmd`.
 
 ## 7. Protótipo
-Tela A: cadastro de lote (tipo, peso, validade, armazenamento, atestado). Tela B: lista de ofertas elegíveis ordenadas por compatibilidade. Tela C: acompanhamento (ofertado → aceito → retirado → entregue). Tela D: painel agregado de resultados.
+Tela A: cadastro de lote (tipo, peso, validade, armazenamento), sempre pendente de verificação humana. Tela B: recomendação explicável, para lotes pré-verificados **no cenário fictício**, com escolha manual da instituição. Tela C: acompanhamento de oferta, aceite, retirada e entrega simulados. Tela D: dashboard cujos indicadores derivam dos mesmos lotes e são agrupados pelo mês da primeira oferta, no horário de São Paulo.
 
 ## 8. Uso responsável dos dados
-Minimização de dados pessoais de responsáveis; não registrar beneficiários individuais; acesso por papéis; retenção definida; logs controlados; dados de localização no nível adequado à operação; auditabilidade das decisões. O projeto não pode classificar cidadãos como merecedores de ajuda nem penalizar estabelecimentos por não doar.
+O protótipo não solicita dados pessoais reais nem de beneficiários finais; todos os cadastros e localizações são fictícios. Para operação futura, planejam-se minimização de contatos, acesso por papéis, retenção e logs controlados, localização no nível necessário e auditabilidade das decisões. Esses controles de backend **não estão implementados**. O projeto não pode classificar cidadãos como merecedores de ajuda nem penalizar estabelecimentos por não doar.
 
 ## Riscos principais
 - Oferta com falha sanitária: bloquear cadastro sem evidência de verificação; dupla conferência antes da entrega.
