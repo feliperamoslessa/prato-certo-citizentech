@@ -1,82 +1,88 @@
-# 🍽️ Prato Certo — Tecnologia que alimenta conexões
+![Prato Certo — tecnologia que alimenta conexões](docs/assets/banner.svg)
 
-> Projeto conceitual CitizenTech | Global Solution 2026.2 — FIAP | Data Science
+# Prato Certo · v0.2
 
-**Missão:** conectar estabelecimentos com excedentes alimentares aptos à doação a organizações receptoras, com priorização transparente, rastreabilidade e proteção de dados.
+Protótipo acadêmico CitizenTech para a Global Solution da FIAP. A proposta aproxima estabelecimentos com excedentes alimentares de organizações que podem recebê-los. A demonstração usa um cenário fictício inspirado em São Paulo e se relaciona com os ODS 2 e 12. Todos os lotes, instituições, distâncias, doações e indicadores são **simulados**.
 
-**Status:** proposta acadêmica / protótipo conceitual. Não representa sistema operacional, entrega real de alimentos ou validação sanitária.
+## Demonstração
 
-## Problema e território
-Piloto proposto no município de São Paulo (SP). A operação de alimentos combina excedentes de curta janela de aproveitamento com organizações receptoras que possuem capacidade e condições de recebimento. A hipótese é que informação fragmentada e coordenação logística insuficiente aumentem oportunidades perdidas de doação. Essa hipótese precisa ser validada em entrevistas.
+| Dashboard de impacto | Recomendações de instituições |
+| --- | --- |
+| ![Dashboard com os seis indicadores e gráficos de peso simulado](docs/assets/dashboard.jpg) | ![Matching do lote PC-011 com capacidade, distância e margem de validade](docs/assets/matching.jpg) |
 
-## Solução
-1. Estabelecimento cadastra um lote de excedentes, quantidade, validade e requisitos de conservação.
-2. Responsável habilitado confirma a aptidão para doação, conforme exigências sanitárias.
-3. O sistema filtra instituições elegíveis e ordena alternativas por compatibilidade, distância e prazo.
-4. Organização aceita a oferta e confirma retirada e recebimento.
-5. Painel mostra volume efetivamente doado, taxa de aproveitamento e tempos de operação.
+1. Abra **Combinar lotes** e escolha **PC-011** para comparar as instituições compatíveis. A ordem ajuda na escolha. Selecione uma instituição e confirme para registrar a oferta simulada.
+2. Em **Acompanhar doações**, abra o mesmo lote e registre aceite, retirada e entrega. Confira o efeito no dashboard filtrando pelo mês da oferta.
+3. Cadastre um excedente. Ele fica pendente de verificação sanitária humana e indisponível para oferta. O lote **PC-013** demonstra o mesmo bloqueio.
+4. Em **Cenário de demonstração**, ative a persistência opcional ou restaure o cenário original.
 
-**Não há promessa de aprovação sanitária automática** nem de predição de IA treinada.
+## Execução local
 
-## Objetivos de Desenvolvimento Sustentável
-- **ODS 2:** apoio indireto a ações contra a insegurança alimentar.
-- **ODS 12, especialmente 12.3:** redução potencial de desperdício no varejo e serviços alimentares.
-
-## Entregáveis FIAP
-- Proposta executiva: `presentation/`
-- Vídeo pitch e arquivos-fonte: `pitch/` e `src/`
-- Relatório de Governança, Ética e Segurança: `docs/`
-- Diagrama de fluxo: `architecture/`
-- Dados de demonstração: `data/`
-
-## Tecnologias propostas
-Formulário web responsivo / interface leve; API Python (FastAPI, como opção futura); PostgreSQL; ETL Python; Metabase ou Power BI; geocodificação por OpenStreetMap, condicionada a limites/licenças. Tecnologias são **propostas**, não implementadas.
-
-## Boas práticas
-Dados simulados estão marcados como tais. Não publicar nomes, RMs, contatos reais, coordenadas domiciliares, dados de beneficiários nem segredos de API. Documentação acadêmica com nomes/RMs deve ficar em entrega privada.
-
-## Fontes
-- [PNUMA — Food Waste Index Report 2024, mensagens-chave](https://wedocs.unep.org/bitstream/handle/20.500.11822/45275/Food-Waste-Index-2024-key-messages.pdf?sequence=8)
-- [Lei 15.224/2025 — Câmara dos Deputados](https://www2.camara.leg.br/legin/fed/lei/2025/lei-15224-30-setembro-2025-798048-publicacaooriginal-176570-pl.html)
-- [ONU — ODS 2](https://sdgs.un.org/goals/goal2) e [ODS 12](https://sdgs.un.org/goals/goal12)
-
-## Equipe
-**Preencher somente nas cópias privadas de entrega:** [nomes completos e RMs, em ordem alfabética]. 
-
-## Executar o protótipo localmente
-
-Requisitos: Node.js 22.18 ou superior e npm.
+Use Node.js **22.18 ou superior** com npm.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Abra o endereço exibido pelo Vite no terminal. Use o menu para acessar o dashboard de
-impacto, cadastrar um excedente ou filtrar as doações por status e instituição.
+Abra o endereço mostrado pelo Vite, normalmente `http://localhost:5173`.
 
-| Script | O que faz |
+| Comando | Finalidade |
 | --- | --- |
-| `npm run dev` | Inicia o servidor local com atualização automática. |
-| `npm run build` | Verifica os tipos e gera o site estático em `dist/`. |
-| `npm run preview` | Serve o build localmente após a compilação. |
-| `npm test` | Executa os testes de validação, registro e filtros. |
+| `npm run dev` | Servidor local com atualização durante o desenvolvimento |
+| `npm test` | Testes de validação, integridade, matching, histórico e indicadores |
+| `npm run build` | Verificação TypeScript e build estático em `dist/` |
+| `npm run preview` | Visualização local do build |
 
-A interface usa React, TypeScript, Vite e Tailwind CSS. Os indicadores e as instituições
-são fictícios. O dashboard apresenta uma série histórica independente da lista de
-acompanhamento. Os lotes cadastrados ficam em memória e são descartados ao recarregar
-a página. Cada novo lote fica pendente de verificação sanitária humana e indisponível
-para oferta. O protótipo funciona sem backend, autenticação ou integrações externas.
+## Arquitetura e stack
 
-### Animações e pitch
+| Camada | Versão 0.2 | Proposta acadêmica |
+| --- | --- | --- |
+| Interface | React, TypeScript, Vite, Tailwind CSS e Lucide | Portal para estabelecimentos e instituições |
+| Interação | GSAP na abertura e nas sugestões, Motion nos indicadores, navegação e ações, Three.js com React Three Fiber na abertura e Lenis na rolagem do dashboard | Validação de usabilidade e acessibilidade em piloto |
+| Regras e dados | Cenário em `src/mock.ts`, regras em `src/model.ts`, agregações em `src/metrics.ts` | Avaliação sanitária humana, regras de qualidade e priorização explicável |
+| Armazenamento | Estado React e cópia opcional no `localStorage` do navegador | API e banco relacional com controle de acesso, rastreabilidade e auditoria |
 
-A visão de impacto usa GSAP na abertura, Three.js com React Three Fiber na cena 3D,
-Lenis na rolagem e Motion nas transições e nos cards. A preferência do sistema por
-movimento reduzido ativa a ilustração estática e mantém a rolagem nativa.
+O aplicativo roda no cliente. A interface respeita a preferência do sistema por movimento reduzido. A composição Remotion existente continua em `pitch/video/`.
 
-O botão **Abrir vídeo** no dashboard exibe a apresentação curta e silenciosa de 38
-segundos. A composição usa Remotion e fica em `pitch/video/`.
+## Metodologia dos dados
 
-- `npm run pitch:studio` abre o editor local do vídeo.
-- `npm run pitch:render` gera `pitch/prato-certo.mp4` em 1080p, a 30 quadros por segundo.
-  O Remotion pode baixar o navegador de renderização na primeira execução.
+O cenário inicial gera 15 lotes e três instituições fictícias. Os períodos históricos e as validades iniciais são relativos à abertura sem cenário salvo ou à restauração. Um lote pode ter uma oferta vinculada a uma instituição e um histórico de etapas. O status atual é a última etapa registrada, ou o estado da verificação sanitária quando ainda não há oferta. O CSV em `data/` é um exemplo acadêmico independente e fica fora do fluxo da aplicação.
+
+Dashboard, matching e acompanhamento consultam o mesmo conjunto de lotes. Os períodos incluem o mês atual e agrupam pelo mês UTC da **primeira oferta**. Uma entrega em mês posterior continua no grupo da oferta. O peso de entrega corresponde ao lote inteiro neste cenário. Os horários de acompanhamento aparecem no fuso de São Paulo.
+
+| Indicador | Fórmula |
+| --- | --- |
+| Peso ofertado | Soma dos pesos com oferta no período, incluindo canceladas |
+| Peso entregue | Soma dos pesos com status final Entregue entre as ofertas do período |
+| Lotes entregues | Contagem dos lotes com status final Entregue entre as ofertas do período |
+| Aproveitamento | 100 × peso entregue ÷ peso ofertado |
+| Receptoras atendidas | Contagem de instituições distintas com pelo menos uma entrega nesse conjunto |
+| Tempo mediano de aceite | Mediana dos minutos entre oferta e aceite entre lotes com evento de aceite |
+| Cancelamento | 100 × quantidade de lotes cancelados ÷ quantidade de lotes ofertados |
+| Perfil das entregas | Peso entregue por categoria e 100 × peso da categoria ÷ peso total entregue |
+
+O gráfico mensal aplica as mesmas fórmulas de peso dentro de cada mês. Indicadores sem denominador ou amostra exibem um traço.
+
+### Matching e transições
+
+A recomendação exige lote com verificação registrada no cenário, validade futura e nenhuma oferta anterior. A instituição precisa comportar o peso integral, aceitar o tipo de conservação e ter pelo menos um minuto de margem. A distância euclidiana usa pontos fictícios em quilômetros. O prazo estimado soma o tempo de preparo declarado e o arredondamento para cima de três minutos por quilômetro. A margem é o tempo restante até a validade menos esse prazo, em minutos inteiros.
+
+Entre instituições compatíveis, a ordem é menor distância, maior margem, maior capacidade e código estável da instituição. A capacidade é declarada por lote. A pessoa escolhe e confirma a oferta. A aplicação revalida a elegibilidade no momento da confirmação. A jornada simulada segue oferta → aceite → retirada → entrega, com cancelamento possível antes de concluir.
+
+## Segurança e limites
+
+Os formulários usam campos de domínio fechados e valores de peso e validade. O projeto usa somente dados fictícios e não coleta nomes de pessoas, RMs, contatos, coordenadas reais ou dados de beneficiários. A cópia opcional fica vinculada ao navegador e à origem local. O formato e o histórico são validados ao carregar. Use uma aba por cenário para evitar que a última gravação substitua alterações de outra aba.
+
+A simulação não tem backend, autenticação, sincronização, cálculo real de rotas, notificações ou atestação sanitária. A interface não permite aprovar sanitariamente novos lotes. As verificações iniciais são marcadores fictícios para demonstrar o fluxo. O produto não realiza doações reais nem estima refeições a partir de quilogramas.
+
+## Roadmap
+
+- Validar critérios, capacidade e janelas de coleta com operadores e organizações.
+- Testar tarefas completas com leitores de tela e dispositivos de baixa capacidade.
+- Especificar trilha de auditoria, autorização, retenção e revisão humana antes de qualquer piloto real.
+
+## Validação e documentos
+
+`npm test` aprovou **11 testes** e `npm run build` gerou o bundle estático. O Vite sinaliza o tamanho do módulo 3D, carregado sob demanda. O fluxo de recomendação, oferta, entrega, persistência e restauração foi conferido no navegador, assim como a navegação em largura móvel.
+
+A documentação acadêmica está na [proposta executiva](docs/proposta-executiva.md), na [base de governança](docs/governanca-base.md) e no [diagrama de fluxo](architecture/fluxo-dados.mmd).

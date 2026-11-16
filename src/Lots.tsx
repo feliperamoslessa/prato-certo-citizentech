@@ -1,9 +1,8 @@
 import { useRef, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
-import { ArrowRight, CircleAlert, ClipboardList, ListFilter, PackageOpen, ShieldCheck } from 'lucide-react'
-import { receivers } from './mock'
-import { categories, filterDonations, formatDate, formatNumber, statuses, storageOptions, validateLot } from './model'
-import type { Donation, LotInput } from './model'
+import { ArrowRight, CircleAlert, ClipboardList, ShieldCheck } from 'lucide-react'
+import { categories, storageOptions, validateLot } from './model'
+import type { LotInput } from './model'
 
 export function LotForm({ onRegister }: { onRegister: (input: LotInput) => void }) {
 
@@ -35,8 +34,8 @@ export function LotForm({ onRegister }: { onRegister: (input: LotInput) => void 
     }
     try {
       onRegister(input)
-    } catch {
-      setFailure('O lote não pôde ser cadastrado. Revise a validade e tente novamente.')
+    } catch (error) {
+      setFailure(error instanceof Error ? error.message : 'O lote não pôde ser cadastrado.')
     }
   }
 
@@ -100,67 +99,6 @@ export function LotForm({ onRegister }: { onRegister: (input: LotInput) => void 
         <p>O lote é registrado como <strong>Verificação pendente</strong> e fica indisponível para oferta.</p>
         <p>Use apenas informações fictícias nesta demonstração.</p>
       </aside>
-    </div>
-  )
-}
-
-export function Donations({ donations, notice, dismissNotice }: { donations: Donation[]; notice: string; dismissNotice: () => void }) {
-  const [status, setStatus] = useState('')
-  const [receiver, setReceiver] = useState('')
-  const filtered = filterDonations(donations, status, receiver)
-
-  function clear() {
-    setStatus('')
-    setReceiver('')
-  }
-
-  return (
-    <div className="space-y-5">
-      {notice && <div className="success-banner" role="status"><ShieldCheck size={20} /><span>{notice}</span><button onClick={dismissNotice} className="text-button">Dispensar</button></div>}
-      <section className="panel tracking-card" aria-labelledby="tracking-title">
-        <div className="section-heading tracking-heading">
-          <div><h2 id="tracking-title">Lotes e doações</h2><p>Fluxo simulado com instituições fictícias.</p></div>
-          <span className="metric-icon"><ListFilter size={20} /></span>
-        </div>
-        <div className="filters">
-          <label className="field">Status
-            <select value={status} onChange={(e) => setStatus(e.target.value)}>
-              <option value="">Todos os status</option>
-              {Object.entries(statuses).map(([value, label]) => <option value={value} key={value}>{label}</option>)}
-            </select>
-          </label>
-          <label className="field">Instituição receptora
-            <select value={receiver} onChange={(e) => setReceiver(e.target.value)}>
-              <option value="">Todas as instituições</option>
-              {receivers.map((name) => <option key={name}>{name}</option>)}
-            </select>
-          </label>
-          {(status || receiver) && <button className="button secondary" onClick={clear}>Limpar filtros</button>}
-        </div>
-        <p className="result-count" role="status">{filtered.length} {filtered.length === 1 ? 'registro' : 'registros'}</p>
-        {filtered.length === 0 ? (
-          <div className="empty-state">
-            <PackageOpen size={30} aria-hidden="true" />
-            <h3>Nenhum lote encontrado</h3>
-            <p>{status || receiver ? 'Ajuste os filtros para consultar outros registros.' : 'Cadastre um excedente para começar.'}</p>
-            {status || receiver ? <button className="button secondary" onClick={clear}>Mostrar todos os lotes</button> : <a className="button primary" href="#excedentes">Cadastrar excedente</a>}
-          </div>
-        ) : (
-          <ul className="donation-list">
-            {filtered.map((donation) => (
-              <li key={donation.id}>
-                <div className="donation-item"><div><span className="lot-id">{donation.id}</span><h3>{donation.category}</h3></div><span className={`status status-${donation.status}`}>{statuses[donation.status]}</span></div>
-                <dl className="donation-info">
-                  <div><dt>Peso</dt><dd>{formatNumber(donation.weight)} kg</dd></div>
-                  <div><dt>Validade</dt><dd>{formatDate(new Date(donation.expires))}</dd></div>
-                  <div><dt>Armazenamento</dt><dd>{donation.storage}</dd></div>
-                  <div><dt>Instituição receptora</dt><dd>{donation.receiver ?? 'Aguardando verificação'}</dd></div>
-                </dl>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
     </div>
   )
 }

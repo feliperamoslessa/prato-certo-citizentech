@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 290" role="img" aria-labelledby="title desc">
+  <title id="title">CitizenTech Prato Certo</title>
+  <desc id="desc">Banner verde com tipografia creme e um prato ilustrado com alimentos em tons de laranja e verde.</desc>
+  <rect width="1120" height="290" rx="24" fill="#204b3b"/>
+  <g fill="none" stroke="#a3b89f" opacity=".35">
+    <circle cx="942" cy="145" r="116"/><circle cx="942" cy="145" r="135"/>
+    <path d="M700 224c32-50 72-65 113-54m236-85c16-12 38-15 57-3" stroke-dasharray="5 6" stroke-width="2"/>
+  </g>
+  <g font-family="Arial, sans-serif">
+    <text x="58" y="82" fill="#efab74" font-size="17" font-weight="700" letter-spacing="4">CITIZENTECH · GLOBAL SOLUTION FIAP</text>
+    <text x="53" y="166" fill="#f5f0e6" font-family="Georgia, serif" font-size="90" letter-spacing="-5">Prato Certo<tspan fill="#e89145">.</tspan></text>
+    <text x="59" y="224" fill="#f5f0e6" font-size="26">Tecnologia que alimenta conexões</text>
+  </g>
+  <circle cx="942" cy="145" r="92" fill="#f5f0e6"/>
+  <circle cx="942" cy="145" r="75" fill="#ebe2d0" stroke="#fcf8ee" stroke-width="4"/>
+  <path d="M904 169c-17-23 2-42 22-35 15 5 22 24 12 35-10 13-25 13-34 0Z" fill="#e89145"/>
+  <path d="M945 172c-7-21 12-47 34-40 20 5 15 28 2 42-13 15-31 14-36-2Z" fill="#739882"/>
+  <path d="M925 128c-4-27 19-32 34-25 13 5 16 20 5 32-11 12-36 8-39-7Z" fill="#c86b48"/>
+  <g fill="none" stroke="#204b3b" stroke-width="3" stroke-linecap="round"><path d="M927 136l-8-10m34-21 5-10m16 40 10-10"/></g>
+  <g fill="#e89145"><circle cx="809" cy="112" r="6"/><circle cx="1065" cy="197" r="5"/></g>
+</svg>

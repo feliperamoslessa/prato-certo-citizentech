@@ -1,28 +1,52 @@
-import type { Donation } from './model'
+import { day, MINUTE } from './model.ts'
+import type { EventStatus, Lot, Receiver } from './model.ts'
 
-export const receivers = ['Rede Semente (fictícia)', 'Instituto Mesa Aberta (fictício)', 'Casa Horizonte (fictícia)']
+export const receivers = [
+  { id: 'R01', name: 'Rede Semente', capacityKg: 25, storage: ['Temperatura ambiente', 'Refrigerado'], point: [2, 1], prepMinutes: 35 },
+  { id: 'R02', name: 'Instituto Mesa Aberta', capacityKg: 60, storage: ['Temperatura ambiente', 'Refrigerado', 'Congelado'], point: [4, 2], prepMinutes: 25 },
+  { id: 'R03', name: 'Casa Horizonte', capacityKg: 40, storage: ['Temperatura ambiente'], point: [1, 1], prepMinutes: 50 },
+] as const satisfies readonly Receiver[]
 
-export const donations: Donation[] = [
-  { id: 'PC-006', category: 'Hortifruti', weight: 24, expires: '2026-11-20T16:00:00-03:00', storage: 'Refrigerado', status: 'delivered', receiver: receivers[0] },
-  { id: 'PC-005', category: 'Panificação', weight: 12.5, expires: '2026-11-21T12:00:00-03:00', storage: 'Temperatura ambiente', status: 'collected', receiver: receivers[1] },
-  { id: 'PC-004', category: 'Alimentos embalados', weight: 30, expires: '2026-11-27T18:00:00-03:00', storage: 'Temperatura ambiente', status: 'accepted', receiver: receivers[2] },
-  { id: 'PC-003', category: 'Hortifruti', weight: 18, expires: '2026-11-22T10:00:00-03:00', storage: 'Refrigerado', status: 'offered', receiver: receivers[0] },
-  { id: 'PC-002', category: 'Refeições preparadas', weight: 8, expires: '2026-11-18T18:00:00-03:00', storage: 'Congelado', status: 'pending', receiver: null },
-  { id: 'PC-001', category: 'Panificação', weight: 10, expires: '2026-11-10T18:00:00-03:00', storage: 'Temperatura ambiente', status: 'canceled', receiver: receivers[1] },
-]
+const historicalLots = [
+  ['Hortifruti', 35, 'Refrigerado', 'R02', 'delivered', 5],
+  ['Panificação', 24, 'Temperatura ambiente', 'R03', 'canceled', 5],
+  ['Alimentos embalados', 37, 'Temperatura ambiente', 'R03', 'delivered', 4],
+  ['Hortifruti', 35, 'Refrigerado', 'R02', 'canceled', 4],
+  ['Refeições preparadas', 42, 'Congelado', 'R02', 'delivered', 3],
+  ['Panificação', 32, 'Temperatura ambiente', 'R03', 'delivered', 2],
+  ['Hortifruti', 24, 'Refrigerado', 'R01', 'canceled', 2],
+  ['Hortifruti', 45, 'Refrigerado', 'R02', 'delivered', 1],
+  ['Panificação', 22, 'Temperatura ambiente', 'R01', 'delivered', 1],
+  ['Alimentos embalados', 33, 'Temperatura ambiente', 'R03', 'canceled', 1],
+] as const
 
-export const monthlyImpact = [
-  { month: 'Mai', delivered: 120, offered: 185, lots: 8, active: 3 },
-  { month: 'Jun', delivered: 166, offered: 235, lots: 11, active: 4 },
-  { month: 'Jul', delivered: 143, offered: 207, lots: 9, active: 4 },
-  { month: 'Ago', delivered: 205, offered: 265, lots: 14, active: 5 },
-  { month: 'Set', delivered: 217, offered: 288, lots: 16, active: 5 },
-  { month: 'Out', delivered: 265, offered: 320, lots: 20, active: 6 },
-]
+function history(status: EventStatus, at: number) {
+  const steps: Record<EventStatus, EventStatus[]> = {
+    offered: ['offered'],
+    accepted: ['offered', 'accepted'],
+    collected: ['offered', 'accepted', 'collected'],
+    delivered: ['offered', 'accepted', 'collected', 'delivered'],
+    canceled: ['offered', 'canceled'],
+  }
+  return steps[status].map((step, index) => ({ status: step, at: at + index * 45 * MINUTE }))
+}
 
-export const categoryShare = [
-  { label: 'Hortifruti', value: 42, color: '#204B3B' },
-  { label: 'Panificação', value: 28, color: '#739882' },
-  { label: 'Alimentos embalados', value: 18, color: '#E89145' },
-  { label: 'Refeições preparadas', value: 12, color: '#e9d9ba' },
-]
+export function createScenario(now = Date.now()): Lot[] {
+  const date = new Date(now)
+  const historical = historicalLots.map(([category, weight, storage, receiverId, status, monthsAgo], index): Lot => {
+    const at = Date.UTC(date.getUTCFullYear(), date.getUTCMonth() - monthsAgo, 12, 14)
+    return {
+      id: `PC-${String(index + 1).padStart(3, '0')}`,
+      category, weight, storage, createdAt: at - day, expiresAt: at + 2 * day, point: [0, 0],
+      checkedAt: at - 60 * MINUTE, offer: { receiverId, events: history(status, at) },
+    }
+  })
+  const active: Lot[] = [
+    { id: 'PC-011', category: 'Hortifruti', weight: 18, storage: 'Refrigerado', createdAt: now - day, expiresAt: now + 2 * day, checkedAt: now - 60 * MINUTE, point: [0, 0], offer: null },
+    { id: 'PC-012', category: 'Panificação', weight: 32, storage: 'Temperatura ambiente', createdAt: now - day, expiresAt: now + day, checkedAt: now - 60 * MINUTE, point: [0, 0], offer: null },
+    { id: 'PC-013', category: 'Refeições preparadas', weight: 8, storage: 'Congelado', createdAt: now - day, expiresAt: now + day, checkedAt: null, point: [0, 0], offer: null },
+    { id: 'PC-014', category: 'Refeições preparadas', weight: 18, storage: 'Congelado', createdAt: now - day, expiresAt: now + 15 * MINUTE, checkedAt: now - 60 * MINUTE, point: [0, 0], offer: null },
+    { id: 'PC-015', category: 'Panificação', weight: 25, storage: 'Temperatura ambiente', createdAt: now - day, expiresAt: now + day, checkedAt: now - 6 * 60 * MINUTE, point: [0, 0], offer: { receiverId: 'R03', events: history('collected', now - 4 * 60 * MINUTE) } },
+  ]
+  return [...historical, ...active].reverse()
+}
