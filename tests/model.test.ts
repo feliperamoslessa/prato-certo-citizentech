@@ -2,7 +2,7 @@ import { strict as assert } from 'node:assert'
 import { test } from 'node:test'
 import { advanceLot, filterLots, lotStatus, offerLot, recommend, registerLot, validateLot } from '../src/model.ts'
 import { createScenario, receivers } from '../src/mock.ts'
-import { calculateImpact, monthKeys } from '../src/metrics.ts'
+import { calculateImpact, monthKey, monthKeys, offerMonth } from '../src/metrics.ts'
 import { decodeScenario, encodeScenario } from '../src/scenarioStorage.ts'
 
 const now = Date.parse('2026-11-16T12:00:00Z')
@@ -115,4 +115,22 @@ test('armazenamento rejeita corrupção, duplicidade e oferta sem verificação'
   assert.throws(() => decodeScenario(encodeScenario([fixture[0], fixture[0]]), receivers))
   assert.throws(() => decodeScenario(encodeScenario([{ ...fixture[0], checkedAt: null }]), receivers))
   assert.throws(() => decodeScenario(encodeScenario([{ ...fixture[0], offer: { receiverId: 'inexistente', events: fixture[0].offer!.events } }]), receivers))
+})
+
+test('agrupa ofertas na data local de São Paulo durante a virada de mês', () => {
+  // 01:30 UTC ainda corresponde a 22:30 do dia 31/10 em São Paulo.
+  const octoberLate = Date.parse('2026-11-01T01:30:00Z')
+  const novemberEarly = Date.parse('2026-11-01T03:30:00Z')
+  assert.equal(monthKey(octoberLate), '2026-10')
+  assert.equal(monthKey(novemberEarly), '2026-11')
+  assert.deepEqual(monthKeys(2, octoberLate), ['2026-09', '2026-10'])
+  assert.deepEqual(monthKeys(2, novemberEarly), ['2026-10', '2026-11'])
+
+  const example = {
+    ...lot('PC-011'),
+    offer: { receiverId: 'R01', events: [{ status: 'offered' as const, at: octoberLate }] },
+  }
+  assert.equal(offerMonth(example), '2026-10')
+  assert.equal(calculateImpact([example], ['2026-10']).offered, example.weight)
+  assert.equal(calculateImpact([example], ['2026-11']).offered, 0)
 })
